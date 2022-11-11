@@ -26,6 +26,8 @@
   },
   "dependencies": {
     "@types/paho-mqtt": "^1.0.6",
+    "dotenv": "^16.0.3",
+    "mongodb": "^4.11.0",
     "mqtt": "^4.3.7",
     "paho-mqtt": "^1.1.0"
   }
