@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "@types/paho-mqtt": "^1.0.6",
-    "mqtt": "^4.3.7"
+    "mqtt": "^4.3.7",
+    "paho-mqtt": "^1.1.0"
   }
 }
