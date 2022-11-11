@@ -25,6 +25,7 @@
     "typescript": "~4.7.0"
   },
   "dependencies": {
+    "@types/paho-mqtt": "^1.0.6",
     "mqtt": "^4.3.7"
   }
 }
