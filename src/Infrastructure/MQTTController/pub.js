@@ -1,52 +1,42 @@
-import mqtt, { IClientOptions, MqttClient } from 'mqtt';
-import { createAppointmentCommand } from '../../Application/Commands/createAppointmentCommand';
-const host = 'broker.emqx.io'
-const topic:  string = 'topic/availability'
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const mqtt_1 = __importDefault(require("mqtt"));
+const host = 'broker.emqx.io';
+const topic = 'topic/availability';
 const port = '1883';
-const options : IClientOptions = {
-  clientId: `mqtt_${Math.random().toString(16).slice(3)}`,
-  reconnectPeriod: 1000
-  }
-  
-const connectUrl = `mqtt://${host}:${port}`
-const client = mqtt.connect(connectUrl, options)
-  
-  
+const options = {
+    clientId: `mqtt_${Math.random().toString(16).slice(3)}`,
+    reconnectPeriod: 1000
+};
+const connectUrl = `mqtt://${host}:${port}`;
+const client = mqtt_1.default.connect(connectUrl, options);
+const message = '{"userid": 12345, "requestid" : 13, "dentistid" : 1, "issuance": 1602406766314, "date": "2020-12-14"}';
 client.on('connect', () => {
-console.log('Connected')
-  client.subscribe(topic, (err) => {
-    if(err){
-      console.log('Subscription was unsuccessful')
+    console.log('Connected');
+    while (client.connected) {
+        client.publish(topic, message, { qos: 0 }, function (err) {
+            if (err) {
+                console.log("An error occurred during publish");
+            }
+            else {
+                console.log("Published successfully to " + topic.toString());
+            }
+        });
     }
-    else {
-      console.log(`Subscribe to topic '${topic}'`)
-    }
-    })
-})
-client.on('message', (topic, payload) => {
-  if(!client.connected) {
-    console.log('connection lost')
-  }
-  if(topic.toString() === 'topic/availablity') {
-    const command : createAppointmentCommand = new createAppointmentCommand();
-    const appointment = JSON.parse(payload.toString());
-    command.createAppointment(appointment.userId, appointment.dentistId, appointment.issuance, appointment.date);
-  }
-  console.log('Received Message:', topic, payload.toString())
-})
-
-client.on("error", function (error) {
-  console.log("Error occurred: " + error);
 });
-
+client.on("error", function (error) {
+    console.log("Error occurred: " + error);
+});
 // Notify reconnection
 client.on("reconnect", function () {
-  console.log("Reconnection starting");
+    console.log("Reconnection starting");
 });
-
 // Notify offline status
 client.on("offline", function () {
-  console.log("Currently offline. Please check internet!");
+    console.log("Currently offline. Please check internet!");
 });
 /*const client = mqtt.connect('mqtt://test.mosquitto.org');
 client.on('connect', () => {
@@ -107,4 +97,4 @@ function onMessageArrived(message: Paho.MQTT.Message) {
   }
 }
 
-*/
+*/ 
