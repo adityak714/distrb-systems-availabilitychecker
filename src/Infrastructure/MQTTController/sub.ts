@@ -11,16 +11,15 @@ const options : IClientOptions = {
 const client = mqtt.connect(host, options)
   
 client.on('connect', () => {
-console.log('Connected')
-  client.subscribe(topic, (err) => {
-    if(err){
-      console.log('Subscription was unsuccessful')
+  console.log('Connected');
+  client.subscribe(topic, err => {
+    if (err) {
+      console.log('Subscription was unsuccessful');
+    } else {
+      console.log(`Subscribe to topic '${topic}'`);
     }
-    else {
-      console.log(`Subscribe to topic '${topic}'`)
-    }
-    })
-})
+  });
+});
 client.on('message', (topic, payload) => {
  
   console.log(`Received Message:' '${payload.toString()}`)
@@ -30,18 +29,18 @@ client.on('message', (topic, payload) => {
  
 })
 
-client.on("error", function (error) {
-  console.log("Error occurred: " + error);
+client.on('error', error => {
+  console.log('Error occurred: ' + error);
 });
 
 // Notify reconnection
-client.on("reconnect", function () {
-  console.log("Reconnection starting");
+client.on('reconnect', () => {
+  console.log('Reconnection starting');
 });
 
 // Notify offline status
-client.on("offline", function () {
-  console.log("Currently offline. Please check internet!");
+client.on('offline', () => {
+  console.log('Currently offline. Please check internet!');
 });
 /*const client = mqtt.connect('mqtt://test.mosquitto.org');
 client.on('connect', () => {

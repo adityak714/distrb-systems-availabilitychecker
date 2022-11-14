@@ -1,5 +1,5 @@
-import mqtt, { IClientOptions, MqttClient } from 'mqtt';
-import { createAppointmentCommand } from '../../Application/Commands/createAppointmentCommand';
+import mqtt, {IClientOptions, MqttClient} from 'mqtt';
+import {createAppointmentCommand} from '../../Application/Commands/createAppointmentCommand';
 
 const host = 'broker.mqttdashboard.com'
 const topic:  string = 'topic/availability'
@@ -26,16 +26,16 @@ console.log('Connected')
   }
 })
 
-client.on("error", function (error) {
-  console.log("Error occurred: " + error);
+client.on('error', error => {
+  console.log('Error occurred: ' + error);
 });
 
 // Notify reconnection
-client.on("reconnect", function () {
-  console.log("Reconnection starting");
+client.on('reconnect', () => {
+  console.log('Reconnection starting');
 });
 
 // Notify offline status
-client.on("offline", function () {
-  console.log("Currently offline. Please check internet!");
+client.on('offline', () => {
+  console.log('Currently offline. Please check internet!');
 });
