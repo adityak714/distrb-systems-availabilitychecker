@@ -1,16 +1,16 @@
 import mqtt, { IClientOptions, MqttClient } from 'mqtt';
 import { createAppointmentCommand } from '../../Application/Commands/createAppointmentCommand';
 
-const host = 'broker.emqx.io'
+const host = 'broker.mqttdashboard.com'
 const topic:  string = 'topic/availability'
-const port = '1883';
+
 const options : IClientOptions = {
-  clientId: `mqtt_${Math.random().toString(16).slice(3)}`,
+  port :1883,
+  clientId: 'dentistimo-mqtt',
   reconnectPeriod: 1000
   }
   
-const connectUrl = `mqtt://${host}:${port}`
-const client = mqtt.connect(connectUrl, options)
+const client = mqtt.connect(host, options)
 const message: string= '{"userid": 12345, "requestid" : 13, "dentistid" : 1, "issuance": 1602406766314, "date": "2020-12-14"}';
   
 client.on('connect', () => {
@@ -20,7 +20,7 @@ console.log('Connected')
       if (err) {
           console.log("An error occurred during publish")
       } else {
-          console.log("Published successfully to " + topic.toString())
+          console.log("Published successfully to " + topic.toString() + "with message " + message.toString())
       }
   });
   }

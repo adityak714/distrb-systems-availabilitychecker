@@ -4,12 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mqtt_1 = __importDefault(require("mqtt"));
-const createAppointmentCommand_1 = require("../../Application/Commands/createAppointmentCommand");
-const host = 'broker.emqx.io';
+const host = 'broker.mqttdashboard.com';
 const topic = 'topic/availability';
 const port = '1883';
 const options = {
-    clientId: `mqtt_${Math.random().toString(16).slice(3)}`,
+    clientId: 'dentistimo_mqtt',
     reconnectPeriod: 1000
 };
 const connectUrl = `mqtt://${host}:${port}`;
@@ -26,15 +25,10 @@ client.on('connect', () => {
     });
 });
 client.on('message', (topic, payload) => {
-    if (!client.connected) {
-        console.log('connection lost');
-    }
-    if (topic.toString() === 'topic/availablity') {
-        const command = new createAppointmentCommand_1.createAppointmentCommand();
-        const appointment = JSON.parse(payload.toString());
-        command.createAppointment(appointment.userId, appointment.dentistId, appointment.issuance, appointment.date);
-    }
-    console.log('Received Message:', topic, payload.toString());
+    console.log(`Received Message:' '${payload.toString()}`);
+    //const command : createAppointmentCommand = new createAppointmentCommand();
+    //const appointment = JSON.parse(payload.toString());
+    //command.createAppointment(appointment.userId, appointment.dentistId, appointment.issuance, appointment.date);
 });
 client.on("error", function (error) {
     console.log("Error occurred: " + error);

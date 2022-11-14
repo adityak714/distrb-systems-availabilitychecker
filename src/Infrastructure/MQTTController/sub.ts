@@ -1,16 +1,14 @@
 import mqtt, { IClientOptions, MqttClient } from 'mqtt';
 import { createAppointmentCommand } from '../../Application/Commands/createAppointmentCommand';
-const host = 'broker.emqx.io'
+const host = 'broker.mqttdashboard.com'
 const topic:  string = 'topic/availability'
-const port = '1883';
 const options : IClientOptions = {
-  clientId: `mqtt_${Math.random().toString(16).slice(3)}`,
+  port :1883,
+  clientId: 'dentistimo-mqtt',
   reconnectPeriod: 1000
   }
   
-const connectUrl = `mqtt://${host}:${port}`
-const client = mqtt.connect(connectUrl, options)
-  
+const client = mqtt.connect(host, options)
   
 client.on('connect', () => {
 console.log('Connected')
@@ -24,15 +22,12 @@ console.log('Connected')
     })
 })
 client.on('message', (topic, payload) => {
-  if(!client.connected) {
-    console.log('connection lost')
-  }
-  if(topic.toString() === 'topic/availablity') {
-    const command : createAppointmentCommand = new createAppointmentCommand();
-    const appointment = JSON.parse(payload.toString());
-    command.createAppointment(appointment.userId, appointment.dentistId, appointment.issuance, appointment.date);
-  }
-  console.log('Received Message:', topic, payload.toString())
+ 
+  console.log(`Received Message:' '${payload.toString()}`)
+    //const command : createAppointmentCommand = new createAppointmentCommand();
+    //const appointment = JSON.parse(payload.toString());
+    //command.createAppointment(appointment.userId, appointment.dentistId, appointment.issuance, appointment.date);
+ 
 })
 
 client.on("error", function (error) {
