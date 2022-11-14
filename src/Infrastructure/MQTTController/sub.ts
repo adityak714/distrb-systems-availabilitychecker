@@ -1,52 +1,55 @@
-import mqtt, { IClientOptions, MqttClient } from 'mqtt';
-import { createAppointmentCommand } from '../../Application/Commands/createAppointmentCommand';
-const host = 'broker.emqx.io'
-const topic:  string = 'topic/availability'
+import mqtt, {IClientOptions, MqttClient} from 'mqtt';
+import {createAppointmentCommand} from '../../Application/Commands/createAppointmentCommand';
+const host = 'broker.emqx.io';
+const topic = 'topic/availability';
 const port = '1883';
-const options : IClientOptions = {
+const options: IClientOptions = {
   clientId: `mqtt_${Math.random().toString(16).slice(3)}`,
-  reconnectPeriod: 1000
-  }
-  
-const connectUrl = `mqtt://${host}:${port}`
-const client = mqtt.connect(connectUrl, options)
-  
-  
-client.on('connect', () => {
-console.log('Connected')
-  client.subscribe(topic, (err) => {
-    if(err){
-      console.log('Subscription was unsuccessful')
-    }
-    else {
-      console.log(`Subscribe to topic '${topic}'`)
-    }
-    })
-})
-client.on('message', (topic, payload) => {
-  if(!client.connected) {
-    console.log('connection lost')
-  }
-  if(topic.toString() === 'topic/availablity') {
-    const command : createAppointmentCommand = new createAppointmentCommand();
-    const appointment = JSON.parse(payload.toString());
-    command.createAppointment(appointment.userId, appointment.dentistId, appointment.issuance, appointment.date);
-  }
-  console.log('Received Message:', topic, payload.toString())
-})
+  reconnectPeriod: 1000,
+};
 
-client.on("error", function (error) {
-  console.log("Error occurred: " + error);
+const connectUrl = `mqtt://${host}:${port}`;
+const client = mqtt.connect(connectUrl, options);
+
+client.on('connect', () => {
+  console.log('Connected');
+  client.subscribe(topic, err => {
+    if (err) {
+      console.log('Subscription was unsuccessful');
+    } else {
+      console.log(`Subscribe to topic '${topic}'`);
+    }
+  });
+});
+client.on('message', (topic, payload) => {
+  if (!client.connected) {
+    console.log('connection lost');
+  }
+  if (topic.toString() === 'topic/availablity') {
+    const command: createAppointmentCommand = new createAppointmentCommand();
+    const appointment = JSON.parse(payload.toString());
+    command.createAppointment(
+      appointment.userId,
+      appointment.dentistId,
+      appointment.issuance,
+      appointment.date
+    );
+  }
+  console.log('Received Message:', topic, payload.toString());
+});
+
+client.on('error', error => {
+  console.log('Error occurred: ' + error);
 });
 
 // Notify reconnection
-client.on("reconnect", function () {
-  console.log("Reconnection starting");
+client.on('reconnect', () => {
+  console.log('Reconnection starting');
 });
 
 // Notify offline status
-client.on("offline", function () {
-  console.log("Currently offline. Please check internet!");
+client.on('offline', () => {
+  console.log('Currently offline. Please check internet!');
 });
 /*const client = mqtt.connect('mqtt://test.mosquitto.org');
 client.on('connect', () => {

@@ -4,7 +4,13 @@ import {IAppointmentRepository} from '../../Domain/Intefaces/IAppointmentReposit
 
 export class appointmentRepository implements IAppointmentRepository {
   async registerAppointment(newAppointment: IAppointment): Promise<unknown> {
-    const appointment = await AppointmentSchema.create(newAppointment);
-    return appointment;
+    const appointment = AppointmentSchema.findOne({
+      date: newAppointment.date,
+      dentistId: newAppointment.dentistId,
+    });
+    if (appointment === null) {
+      return await AppointmentSchema.create(newAppointment);
+    }
+    return null;
   }
 }
