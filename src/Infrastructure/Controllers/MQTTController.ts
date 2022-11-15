@@ -7,7 +7,6 @@ export class MQTTController {
     constructor(private createAppointmentCommand: createAppointmentCommand ){}
 
     readonly client = mqtt.connect('mqtt://broker.hivemq.com');
-
     readonly requestTopic = 'availability/request';
     readonly responseTopic = 'availability/response';
 
@@ -15,6 +14,7 @@ export class MQTTController {
     public publish(topic: string, responseMessage: string) {
         this.client.on('connect', () => {
             this.client.publish(topic, responseMessage);
+            console.log(topic ,responseMessage)
         })
     }
 
@@ -32,5 +32,6 @@ export class MQTTController {
     }
 
 }
+
 
 
