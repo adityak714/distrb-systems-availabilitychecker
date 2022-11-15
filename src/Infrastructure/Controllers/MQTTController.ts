@@ -4,7 +4,7 @@ import { createAppointmentCommand } from '../../Application/Commands/createAppoi
 
 export class MQTTController {
 
-    constructor(private createAppointmentCommand: createAppointmentCommand ){}
+    constructor(private createAppointmentCommand: createAppointmentCommand){}
 
     readonly client = mqtt.connect('mqtt://broker.hivemq.com');
     readonly requestTopic = 'availability/request';
@@ -23,14 +23,13 @@ export class MQTTController {
         this.client.on('connect', () => {
             this.client.subscribe(this.requestTopic);
             console.log('Client has subscribed successfully');
-            this.client.on('message', async (message) => {
-            const newMessage = JSON.parse(message);
+        });
+        this.client.on('message', async (topic, message) => {
+            const newMessage = JSON.parse(message.toString());
             const appointmentCommand =  this.createAppointmentCommand.createAppointment(newMessage.userId, newMessage.dentistId, newMessage.issuance, newMessage.date)
             this.publish(this.responseTopic, await appointmentCommand)
-            })
         });
     }
-
 }
 
 
