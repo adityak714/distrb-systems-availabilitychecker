@@ -5,8 +5,8 @@ import { IAppointmentRepository } from '../../Domain/Intefaces/IAppointmentRepos
 export class createAppointmentCommand {
   constructor(private readonly appointmentRepository: IAppointmentRepository) {}
 
-  public async createAppointment(userId: number, dentistId: number, issuance: number, date: Date) {
+  public async createAppointment(userId: number, dentistId: number, issuance: number, date: Date): Promise<string> {
     const newAppointment = new Appointment(userId, dentistId, issuance, date);
-    await this.appointmentRepository.registerAppointment(newAppointment);
+    return await this.appointmentRepository.registerAppointment(newAppointment);
   }
 }

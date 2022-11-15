@@ -1,23 +1,36 @@
 /* eslint-disable prettier/prettier */
 import mqtt from 'mqtt'
-const client = mqtt.connect('mqtt://broker.hivemq.com');
+import { createAppointmentCommand } from '../../Application/Commands/createAppointmentCommand';
 
-//Publish method
-client.on('connect', () => {
-  setInterval(() => {
-    const random = Math.random() * 50;
-    console.log(random);
-    if (random < 30) {
-      client.publish('PradeepKumar', 'Simple MQTT using HiveMQ: ' + random.toString() + '.');
+export class MQTTController {
+
+    constructor(private createAppointmentCommand: createAppointmentCommand ){}
+
+    readonly client = mqtt.connect('mqtt://broker.hivemq.com');
+
+    readonly requestTopic = 'availability/request';
+    readonly responseTopic = 'availability/response';
+
+    //Publish method
+    public publish(topic: string, responseMessage: string) {
+        this.client.on('connect', () => {
+            this.client.publish(topic, responseMessage);
+        })
     }
-  }),30000;
-});
 
-//Subscribe method
-client.on('connect', () => {
-    client.subscribe('PradeepKumar');
-    console.log('Client has subscribed successfully');
-    client.on('message', (topic,message) => {
-      console.log(message.toString)
-    })
-  });
+    //Subscribe method
+    public subscribe(){
+        this.client.on('connect', () => {
+            this.client.subscribe(this.requestTopic);
+            console.log('Client has subscribed successfully');
+            this.client.on('message', async (message) => {
+            const newMessage = JSON.parse(message);
+            const appointmentCommand =  this.createAppointmentCommand.createAppointment(newMessage.userId, newMessage.dentistId, newMessage.issuance, newMessage.date)
+            this.publish(this.responseTopic, await appointmentCommand)
+            })
+        });
+    }
+
+}
+
+
