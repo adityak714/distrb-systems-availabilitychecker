@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import mqtt from 'mqtt'
-import { createAppointmentCommand } from '../../Application/Commands/createAppointmentCommand';
+import { GetAppointmentQuery } from '../../Application/Queries/getAppointmentQuery';
 
 export class MQTTController {
 
-    constructor(private createAppointmentCommand: createAppointmentCommand){}
+    constructor(private getAppointmentQuery: GetAppointmentQuery){}
 
     readonly client = mqtt.connect('mqtt://broker.hivemq.com');
     readonly requestTopic = 'availability/request';
@@ -26,7 +26,7 @@ export class MQTTController {
         });
         this.client.on('message', async (topic, message) => {
             const newMessage = JSON.parse(message.toString());
-            const appointmentCommand =  this.createAppointmentCommand.createAppointment(newMessage.userId, newMessage.dentistId, newMessage.issuance, newMessage.date)
+            const appointmentCommand = this.getAppointmentQuery.getAppointmentQuery(newMessage.dentistId, newMessage.date)
             this.publish(this.responseTopic, await appointmentCommand)
         });
     }

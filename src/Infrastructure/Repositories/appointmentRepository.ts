@@ -19,6 +19,7 @@ export class appointmentRepository implements IAppointmentRepository {
     }
     return 'none';
   }
+
   async getAppointment(dentistId: Number, date: Date): Promise<IAppointment | null> {
     const appointment = await AppointmentSchema.findOne({
       date: date,

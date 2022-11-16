@@ -1,14 +1,14 @@
 /* eslint-disable prettier/prettier */
 import { IAppointmentRepository } from '../../Domain/Intefaces/IAppointmentRepository';
 
-export class CheckAvailabilityQuery {
+export class GetAppointmentQuery {
   constructor(private readonly appointmentRepository: IAppointmentRepository) {}
 
-  public async checkAvailability(dentistId: string, date: string): Promise<boolean> {
+  public async getAppointmentQuery(dentistId: string, date: string): Promise<string> {
     const newAppointment =  this.appointmentRepository.getAppointment(Number(dentistId), new Date(date));
     if (newAppointment === null){
-      return true;
+      return 'yes';
     }
-    return false;
+    return 'no';
   }
 }
