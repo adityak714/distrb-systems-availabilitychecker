@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {IAppointment} from '../Intefaces/IAppointment';
 
 export class Appointment implements IAppointment {
@@ -7,7 +8,7 @@ export class Appointment implements IAppointment {
   issuance: number;
   date: Date;
 
-  constructor(userId: number, dentistId: number, requestId:number, issuance: number, date: Date) {
+  constructor(userId: number, dentistId: number, requestId: number, issuance: number, date: Date) {
     this.userId = userId;
     this.dentistId = dentistId;
     this.requestId = requestId;
