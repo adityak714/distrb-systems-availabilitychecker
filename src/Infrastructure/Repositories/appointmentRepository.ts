@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {IAppointment} from '../../Domain/Intefaces/IAppointment';
 import AppointmentSchema from '../Models/appointmentSchema';
 import {IAppointmentRepository} from '../../Domain/Intefaces/IAppointmentRepository';
@@ -17,5 +18,16 @@ export class appointmentRepository implements IAppointmentRepository {
       return newAppointment.date.toDateString();
     }
     return 'none';
+  }
+
+  async getAppointment(dentistId: Number, date: Date): Promise<IAppointment | null> {
+    const appointment = await AppointmentSchema.findOne({
+      date: date,
+      dentistId: dentistId,
+    });
+    if (appointment === null) {
+      return null;
+    }
+    return appointment;
   }
 }
