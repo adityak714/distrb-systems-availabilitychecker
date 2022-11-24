@@ -34,6 +34,7 @@ export class MQTTController {
         });
         this.client.on('message', async (topic, message) => {
             const newMessage = JSON.parse(message.toString());
+            console.log(newMessage)
             const appointmentCommand = this.getAppointmentQuery.getAppointmentQuery(newMessage.dentistId, newMessage.date)
             this.publish(this.responseTopic, await appointmentCommand)
         });
