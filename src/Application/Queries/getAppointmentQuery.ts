@@ -5,8 +5,8 @@ export class GetAppointmentQuery {
   constructor(private readonly appointmentRepository: IAppointmentRepository) {}
 
   public async getAppointmentQuery(dentistId: string, date: string): Promise<string> {
-    const newAppointment =  this.appointmentRepository.getAppointment(Number(dentistId), new Date(date));
-    if (newAppointment === null){
+    const isAppointment =  this.appointmentRepository.getAppointment(Number(dentistId), new Date(date));
+    if (await isAppointment === false){
       return 'yes';
     }
     return 'no';

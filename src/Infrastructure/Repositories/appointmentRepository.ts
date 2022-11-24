@@ -20,14 +20,14 @@ export class appointmentRepository implements IAppointmentRepository {
     return 'none';
   }
 
-  async getAppointment(dentistId: Number, date: Date): Promise<IAppointment | null> {
+  async getAppointment(dentistId: Number, date: Date): Promise<boolean> {
     const appointment = await AppointmentSchema.findOne({
       date: date,
       dentistId: dentistId,
     });
     if (appointment === null) {
-      return null;
+      return false;
     }
-    return appointment;
+    return true;
   }
 }
