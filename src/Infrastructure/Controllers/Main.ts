@@ -7,5 +7,5 @@ mongoose.connect(
   'mongodb+srv://gusreinaos:4MNbebz6E04hq5IV@cluster0.x1srwma.mongodb.net/test'
 );
 const repository = new appointmentRepository();
-const query = new GetAppointmentQuery(repository);
-new MQTTController(query).subscribe();
+const command = new GetAppointmentQuery(repository);
+new MQTTController(command).connect();
