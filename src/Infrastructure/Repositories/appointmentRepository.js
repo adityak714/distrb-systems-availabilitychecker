@@ -34,10 +34,15 @@ class appointmentRepository {
     }
     getAppointment(dentistId, date) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log(date);
+            date.setMinutes(0);
+            date.setSeconds(0);
+            console.log(date);
             const appointment = yield appointmentSchema_1.default.findOne({
-                date: date,
                 dentistId: dentistId,
+                date: date
             });
+            console.log(appointment);
             if (appointment === null) {
                 return null;
             }
