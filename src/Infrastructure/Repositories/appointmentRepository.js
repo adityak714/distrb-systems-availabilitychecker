@@ -34,6 +34,8 @@ class appointmentRepository {
     }
     getAppointment(dentistId, date) {
         return __awaiter(this, void 0, void 0, function* () {
+            date.setMinutes(0);
+            date.setSeconds(0);
             const appointment = yield appointmentSchema_1.default.findOne({
                 date: date,
                 dentistId: dentistId,

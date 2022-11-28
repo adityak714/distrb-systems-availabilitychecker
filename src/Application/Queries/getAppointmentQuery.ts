@@ -5,10 +5,11 @@ export class GetAppointmentQuery {
   constructor(private readonly appointmentRepository: IAppointmentRepository) {}
 
   public async getAppointmentQuery(dentistId: string, date: string): Promise<string> {
-    const isAppointment =  this.appointmentRepository.getAppointment(Number(dentistId), new Date(date));
-    if (await isAppointment === false){
+    const newAppointment =  await this.appointmentRepository.getAppointment(Number(dentistId), new Date(date));
+    if (newAppointment === null){
       return 'yes';
     }
     return 'no';
   }
 }
+
