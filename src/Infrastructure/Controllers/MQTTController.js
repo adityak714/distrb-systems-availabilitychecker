@@ -29,25 +29,23 @@ class MQTTController {
         this.requestTopic = 'availability/request';
         this.responseTopic = 'availability/response';
     }
-    //Publish method
-    publish(topic, responseMessage) {
+    connect() {
         this.client.on('connect', () => {
-            this.client.publish(topic, responseMessage);
-            console.log(topic, responseMessage);
-        });
-    }
-    //Subscribe method
-    subscribe() {
-        this.client.on('connect', () => {
-            this.client.subscribe(this.requestTopic);
+            console.log('Client is connected to the internet');
+            this.client.subscribe(this.requestTopic, { qos: 1 });
             console.log('Client has subscribed successfully');
+            this.client.on('message', (topic, message) => __awaiter(this, void 0, void 0, function* () {
+                const newMessage = JSON.parse(message.toString());
+                console.log(newMessage);
+                const appointmentCommand = this.getAppointmentQuery.getAppointmentQuery(newMessage.dentistId, newMessage.date);
+                console.log((yield appointmentCommand).toString());
+                const response = {
+                    'response': (yield appointmentCommand).toString()
+                };
+                console.log(response);
+                this.client.publish(this.responseTopic, JSON.stringify(response), { qos: 1 });
+            }));
         });
-        this.client.on('message', (topic, message) => __awaiter(this, void 0, void 0, function* () {
-            const newMessage = JSON.parse(message.toString());
-            console.log(newMessage);
-            const appointmentCommand = this.getAppointmentQuery.getAppointmentQuery(newMessage.dentistId, newMessage.date);
-            this.publish(this.responseTopic, yield appointmentCommand);
-        }));
     }
 }
 exports.MQTTController = MQTTController;

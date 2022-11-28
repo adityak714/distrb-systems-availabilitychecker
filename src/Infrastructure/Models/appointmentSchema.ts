@@ -6,7 +6,11 @@ const appointmentSchema: Schema = new Schema({
   dentistId: {type: Number, required: true, unique: false},
   requestId: {type: Number, required: true, unique: false},
   issuance: {type: Number, required: true, unique: false},
-  date: {type: Date, required: true, unique: false},
+  date: {
+    type: Date,
+    required: true,
+    unique: false,
+  },
 });
 
 export default mongoose.model<IAppointment>('Appointment', appointmentSchema);

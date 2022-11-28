@@ -1,19 +1,19 @@
 /* eslint-disable prettier/prettier */
 import {IAppointment} from '../../Domain/Intefaces/IAppointment';
-import AppointmentSchema from '../Models/appointmentSchema';
+import Appointment from '../Models/appointmentSchema';
 import {IAppointmentRepository} from '../../Domain/Intefaces/IAppointmentRepository';
 
 export class appointmentRepository implements IAppointmentRepository {
   async registerAppointment(newAppointment: IAppointment): Promise<string> {
     newAppointment.date.setMinutes(0);
     newAppointment.date.setSeconds(0);
-    const appointment = await AppointmentSchema.findOne({
+    const appointment = await Appointment.findOne({
       date: newAppointment.date,
       dentistId: newAppointment.dentistId,
     });
     console.log(appointment);
     if (appointment === null) {
-      await AppointmentSchema.create(newAppointment);
+      await Appointment.create(newAppointment);
       console.log(newAppointment.date);
       return newAppointment.date.toDateString();
     }
@@ -21,7 +21,9 @@ export class appointmentRepository implements IAppointmentRepository {
   }
 
   async getAppointment(dentistId: Number, date: Date): Promise<IAppointment | null> {
-    const appointment = await AppointmentSchema.findOne({
+    date.setMinutes(0);
+    date.setSeconds(0);
+    const appointment = await Appointment.findOne({
       date: date,
       dentistId: dentistId,
     });

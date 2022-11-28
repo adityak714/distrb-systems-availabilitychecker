@@ -16,7 +16,7 @@ class GetAppointmentQuery {
     }
     getAppointmentQuery(dentistId, date) {
         return __awaiter(this, void 0, void 0, function* () {
-            const newAppointment = this.appointmentRepository.getAppointment(Number(dentistId), new Date(date));
+            const newAppointment = yield this.appointmentRepository.getAppointment(Number(dentistId), new Date(date));
             if (newAppointment === null) {
                 return 'yes';
             }
