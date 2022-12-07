@@ -21,8 +21,14 @@ export class appointmentRepository implements IAppointmentRepository {
   }
 
   async getAppointment(dentistId: Number, date: Date): Promise<IAppointment | null> {
-    date.setMinutes(0);
-    date.setSeconds(0);
+    if (date.getMinutes() >= 0 && date.getMinutes() <= 29) {
+      date.setMinutes(0);
+      date.setSeconds(0);
+    }
+    else if (date.getMinutes() >= 30 && date.getMinutes() <= 59) {
+      date.setMinutes(30);
+      date.setSeconds(0);
+    }
     const appointment = await Appointment.findOne({
       date: date,
       dentistId: dentistId,
