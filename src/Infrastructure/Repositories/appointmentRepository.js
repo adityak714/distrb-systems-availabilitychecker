@@ -34,8 +34,14 @@ class appointmentRepository {
     }
     getAppointment(dentistId, date) {
         return __awaiter(this, void 0, void 0, function* () {
-            date.setMinutes(0);
-            date.setSeconds(0);
+            if (date.getMinutes() >= 0 && date.getMinutes() <= 29) {
+                date.setMinutes(0);
+                date.setSeconds(0);
+            }
+            else if (date.getMinutes() >= 30 && date.getMinutes() <= 59) {
+                date.setMinutes(30);
+                date.setSeconds(0);
+            }
             const appointment = yield appointmentSchema_1.default.findOne({
                 date: date,
                 dentistId: dentistId,
