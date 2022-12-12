@@ -39,7 +39,7 @@ export class appointmentRepository implements IAppointmentRepository {
     return appointment;
   }
 
-  async getAppointments(dentistId: Number): Promise<IAppointment[] | null> {
+  public async getAppointments(dentistId: Number): Promise<IAppointment[] | null> {
     const appointments = await Appointment.find({
       dentistId: dentistId,
     }).sort({date:-1});

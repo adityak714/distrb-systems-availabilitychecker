@@ -20,8 +20,8 @@ export class MQTTController {
     readonly responseTopic = 'availability/response';
     readonly editAvailabilityRequest = 'edit/availability/request'
     readonly editAvailabilityResponse = 'edit/availability/response'
-    readonly requestInventory = 'inventory/request'
-    readonly responseInventory = 'inventory/response'
+    readonly inventoryRequest = 'inventory/request'
+    readonly inventoryResponse = 'inventory/response'
 
     public connect() {
         this.client.on('connect', () => {
@@ -52,7 +52,7 @@ export class MQTTController {
                     console.log(response)
                     this.client.publish(this.editAvailabilityResponse, JSON.stringify(response), {qos: 1})
                 }
-                if(topic === this.requestInventory) {
+                if(topic === this.inventoryRequest) {
                     const dentistId = JSON.parse(message.toString());
                     console.log(dentistId)
                     const appointmentsCommand = this.getInventoryQuery.getInventoryQuery(dentistId)
@@ -61,7 +61,7 @@ export class MQTTController {
                         'response': (await appointmentsCommand).toString()
                     }
                     console.log(response)
-                    this.client.publish(this.responseInventory, JSON.stringify(response), {qos: 1})
+                    this.client.publish(this.inventoryResponse, JSON.stringify(response), {qos: 1})
                 }
             });
         })
