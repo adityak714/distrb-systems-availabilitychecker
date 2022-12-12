@@ -1,10 +1,11 @@
 /* eslint-disable prettier/prettier */
 import mqtt, { IClientOptions } from 'mqtt'
 import { GetAppointmentQuery } from '../../Application/Queries/getAppointmentQuery';
+import { GetInventoryQuery } from '../../Application/Queries/getInventoryQuery';
 
 export class MQTTController {
 
-    constructor(private getAppointmentQuery: GetAppointmentQuery){}
+    constructor(private getAppointmentQuery: GetAppointmentQuery, private getInventoryQuery: GetInventoryQuery){}
 
     readonly options: IClientOptions = {
         port: 8883,
@@ -19,6 +20,8 @@ export class MQTTController {
     readonly responseTopic = 'availability/response';
     readonly editAvailabilityRequest = 'edit/availability/request'
     readonly editAvailabilityResponse = 'edit/availability/response'
+    readonly requestInventory = 'inventory/request'
+    readonly responseInventory = 'inventory/response'
 
     public connect() {
         this.client.on('connect', () => {
@@ -49,8 +52,17 @@ export class MQTTController {
                     console.log(response)
                     this.client.publish(this.editAvailabilityResponse, JSON.stringify(response), {qos: 1})
                 }
-                
-
+                if(topic === this.requestInventory) {
+                    const dentistId = JSON.parse(message.toString());
+                    console.log(dentistId)
+                    const appointmentsCommand = this.getInventoryQuery.getInventoryQuery(dentistId)
+                    console.log((await appointmentsCommand).toString())
+                    const response = {
+                        'response': (await appointmentsCommand).toString()
+                    }
+                    console.log(response)
+                    this.client.publish(this.responseInventory, JSON.stringify(response), {qos: 1})
+                }
             });
         })
     }
