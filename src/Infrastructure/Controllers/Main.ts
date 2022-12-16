@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {GetAppointmentQuery} from '../../Application/Queries/getAppointmentQuery';
 import {appointmentRepository} from '../Repositories/appointmentRepository';
 import {MQTTController} from './MQTTController';
