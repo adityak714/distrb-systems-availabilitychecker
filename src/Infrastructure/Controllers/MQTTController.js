@@ -20,10 +20,10 @@ class MQTTController {
         this.getAppointmentQuery = getAppointmentQuery;
         this.options = {
             port: 8883,
-            host: '50685a82c4c5422da6a39eb1b9961ce0.s2.eu.hivemq.cloud',
+            host: 'cb9fe4f292fe4099ae5eeb9f230c8346.s2.eu.hivemq.cloud',
             protocol: 'mqtts',
-            username: 't2project',
-            password: 'T2project'
+            username: 'T2Project',
+            password: 'Mamamia1234.'
         };
         this.client = mqtt_1.default.connect(this.options);
         this.requestTopic = 'availability/request';

@@ -8,10 +8,10 @@ export class MQTTController {
 
     readonly options: IClientOptions = {
         port: 8883,
-        host: '50685a82c4c5422da6a39eb1b9961ce0.s2.eu.hivemq.cloud',
+        host: 'cb9fe4f292fe4099ae5eeb9f230c8346.s2.eu.hivemq.cloud',
         protocol: 'mqtts',
-        username: 't2project',
-        password: 'T2project'
+        username: 'T2Project',
+        password: 'Mamamia1234.'
     }
 
     readonly client = mqtt.connect(this.options);
