@@ -39,15 +39,20 @@ class MQTTController {
             console.log('Client has subscribed successfully');
             this.client.on('message', (topic, message) => __awaiter(this, void 0, void 0, function* () {
                 if (topic === this.requestTopic) {
-                    const newMessage = JSON.parse(message.toString());
-                    console.log(newMessage);
-                    const appointmentCommand = this.getAppointmentQuery.getAppointmentQuery(newMessage.dentistId, newMessage.date);
-                    console.log((yield appointmentCommand).toString());
-                    const response = {
-                        'response': (yield appointmentCommand).toString()
-                    };
-                    console.log(response);
-                    this.client.publish(this.responseTopic, JSON.stringify(response), { qos: 1 });
+                    try {
+                        const newMessage = JSON.parse(message.toString());
+                        console.log(newMessage);
+                        const appointmentCommand = this.getAppointmentQuery.getAppointmentQuery(newMessage.dentistId, newMessage.date);
+                        console.log((yield appointmentCommand).toString());
+                        const response = {
+                            'response': (yield appointmentCommand).toString()
+                        };
+                        console.log(response);
+                        this.client.publish(this.responseTopic, JSON.stringify(response), { qos: 1 });
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
                 }
                 if (topic === this.editAvailabilityRequest) {
                     const newMessage = JSON.parse(message.toString());
