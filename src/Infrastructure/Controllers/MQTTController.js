@@ -20,30 +20,51 @@ class MQTTController {
         this.getAppointmentQuery = getAppointmentQuery;
         this.options = {
             port: 8883,
-            host: '80a9b426b200440c81e9c17c2ba85bc2.s2.eu.hivemq.cloud',
+            host: 'cb9fe4f292fe4099ae5eeb9f230c8346.s2.eu.hivemq.cloud',
             protocol: 'mqtts',
-            username: 'gusreinaos',
-            password: 'Mosquitto1204!'
+            username: 'T2Project',
+            password: 'Mamamia1234.'
         };
         this.client = mqtt_1.default.connect(this.options);
         this.requestTopic = 'availability/request';
         this.responseTopic = 'availability/response';
+        this.editAvailabilityRequest = 'edit/availability/request';
+        this.editAvailabilityResponse = 'edit/availability/response';
     }
     connect() {
         this.client.on('connect', () => {
             console.log('Client is connected to the internet');
             this.client.subscribe(this.requestTopic, { qos: 1 });
+            this.client.subscribe(this.editAvailabilityRequest, { qos: 1 });
             console.log('Client has subscribed successfully');
             this.client.on('message', (topic, message) => __awaiter(this, void 0, void 0, function* () {
-                const newMessage = JSON.parse(message.toString());
-                console.log(newMessage);
-                const appointmentCommand = this.getAppointmentQuery.getAppointmentQuery(newMessage.dentistId, newMessage.date);
-                console.log((yield appointmentCommand).toString());
-                const response = {
-                    'response': (yield appointmentCommand).toString()
-                };
-                console.log(response);
-                this.client.publish(this.responseTopic, JSON.stringify(response), { qos: 1 });
+                if (topic === this.requestTopic) {
+                    try {
+                        const newMessage = JSON.parse(message.toString());
+                        console.log(newMessage);
+                        const appointmentCommand = this.getAppointmentQuery.getAppointmentQuery(newMessage.dentistId, newMessage.date);
+                        console.log((yield appointmentCommand).toString());
+                        const response = {
+                            'response': (yield appointmentCommand).toString()
+                        };
+                        console.log(response);
+                        this.client.publish(this.responseTopic, JSON.stringify(response), { qos: 1 });
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                }
+                if (topic === this.editAvailabilityRequest) {
+                    const newMessage = JSON.parse(message.toString());
+                    console.log(newMessage);
+                    const appointmentCommand = this.getAppointmentQuery.getAppointmentQuery(newMessage.dentistId, newMessage.date);
+                    console.log((yield appointmentCommand).toString());
+                    const response = {
+                        'response': (yield appointmentCommand).toString()
+                    };
+                    console.log(response);
+                    this.client.publish(this.editAvailabilityResponse, JSON.stringify(response), { qos: 1 });
+                }
             }));
         });
     }
