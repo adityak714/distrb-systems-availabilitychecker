@@ -18,14 +18,20 @@ const mqtt_1 = __importDefault(require("mqtt"));
 class MQTTController {
     constructor(getAppointmentQuery) {
         this.getAppointmentQuery = getAppointmentQuery;
-        this.options = {
+        /*readonly options: IClientOptions = {
             port: 8883,
             host: 'cb9fe4f292fe4099ae5eeb9f230c8346.s2.eu.hivemq.cloud',
             protocol: 'mqtts',
             username: 'T2Project',
             password: 'Mamamia1234.'
-        };
-        this.client = mqtt_1.default.connect(this.options);
+        }
+        */
+        this.client = mqtt_1.default.connect('mqtt://broker.hivemq.com', {
+            port: 1883,
+            username: 'T2Project',
+            password: 'Mamamia1234.',
+        });
+        //readonly client = mqtt.connect(this.options);
         this.requestTopic = 'availability/request';
         this.responseTopic = 'availability/response';
         this.editAvailabilityRequest = 'edit/availability/request';
