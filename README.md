@@ -48,7 +48,9 @@ node Main.js
 ## 👤 Authors and acknowledgment
 Aditya - @adityaa
 
-Aleksey - @daneshm
+Aleksey - @aleksey
+
+Danesh - @daneshm
 
 Andrea - @fulger
 
